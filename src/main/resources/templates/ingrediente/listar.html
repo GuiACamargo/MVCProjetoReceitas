@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+<div layout:fragment="content">
+	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+	    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+	        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+	    </symbol>
+	    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+	        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+	    </symbol>
+	</svg>
+	
+	<div class="alert alert-success d-flex align-items-center mt-4 alert-dismissible fade show" role="alert" th:if="${semErro}">
+	    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+	    <div th:text="${mensagem}"></div>
+	  	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	<div class="alert alert-danger d-flex align-items-center mt-4 alert-dismissible fade show" role="alert" th:if="${temErro}">
+	    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+	    <div th:text="${mensagem}"></div>
+	  	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	
+	<div class="alert alert-primary mt-3" th:if="${#lists.isEmpty(lista)}">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+  			<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+		</svg>
+		Nenhum Ingrediente Encontrado
+	</div>
+
+	<div class="card mt-4" style="background: #323333; max-width:50rem; margin:auto">
+		<div class="card-body">
+			<form method="GET" class="row justify-content-md-center" autocomplete="off">
+				<div class="form-group col">
+			 		<input class="form-control" type="text" list="datalist" name="nome" placeholder="Pesquisa por Ingrediente" th:value="${nome}"></input>
+			 		<datalist id="datalist">
+			 			<option th:each="ingrediente : ${listaCompleta}" th:text="${ingrediente.nome}">
+			 		</datalist>
+			 	</div>
+			 	<button type="submit" class="btn btn-secondary me-3 col col-lg-2" style="max-height:2.3rem"> Pesquisar </button>
+			</form>
+		</div>
+	</div>
+	
+	<div class="card mt-4 text-bg-dark">
+		<h2 class="card-header">
+			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+  				<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+  				<path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+			</svg>
+			<span class="align-middle"> Ingredientes </span>
+		</h2>
+		<div class="card-body pb-5">
+			<div th:if="${not #lists.isEmpty(lista)}">
+				<table class="table table-dark table-striped table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Nome</th>
+							<th sec:authorize="hasRole('admin')">Opções</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="ingrediente : ${lista}">
+							<td th:text="${ingrediente.id}"></td>
+							<td th:text="${ingrediente.nome}"></td>		
+							<td class="align-end" sec:authorize="hasRole('admin')">
+								<a class="btn btn-primary btn-sm" th:href="@{/ingrediente/manage(id=${ingrediente.id})}">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16" style="vertical-align: -0.125em;">
+  									<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+  									<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+									</svg> 
+									Editar
+								</a>
+								<a class="btn btn-danger btn-sm" id="botaoExcluir" th:attr="onclick=|passaLink('${ingrediente.id}')|" data-bs-toggle="modal" data-bs-target="#exampleModal">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16" style="vertical-align: -0.125em;">
+  									<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+									</svg>
+									Excluir
+								</a>
+								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							 		<div class="modal-dialog">
+							    		<div class="modal-content" style="background:#212529">
+							      			<div class="modal-header" style="border-color: #323539">
+							        			<h5 class="modal-title" id="exampleModalLabel">Excluir Ingrediente</h5>
+							        			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+							      			</div>
+							      			<div class="modal-body" style="border-color: #323539">
+							        			<h6>Deseja realmente excluir esse Ingrediente?</h6><br>
+							        			<p>A exclusão de um Ingrediente que esteja em um drink <strong>NÃO</strong> é permitida!</p>
+							      			</div>
+							      			<div class="modal-footer" style="border-color: #323539">
+							       				<button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+							        			<a type="button" class="btn btn-danger" id="botaoConfirmar">
+							        				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16" style="vertical-align: -0.125em;">
+  														<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+													</svg>
+							        				Excluir
+							        			</a>
+							      			</div>
+							    		</div>
+							  		</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script>
+		var botaoConfirmar = document.getElementById("botaoConfirmar")
+	
+		function passaLink(link) {
+			botaoConfirmar.href="/ingrediente/excluir?id=" + link;
+		}
+	</script>
+</div>
+</html>
